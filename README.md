@@ -1,5 +1,7 @@
 # Gestión de Pacientes Prueba Técnica #
 
+* Aplicación web que permite añadir, visualizar, editar y eliminar información sobre pacientes, mediante el uso de una base de datos mysql y de servicios y consultas API REST.
+
 * Para el funcionamiento de la aplicación debe ser creada una base de datos mysql, usando los comandos que se encuentran en el archivo 'base_datos_paciente.sql' y con la autenticación que se entrega en 'app.js'
 
 * Esta aplicación hace uso de Nodejs, Express y mySQL
