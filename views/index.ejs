@@ -28,7 +28,7 @@
 </head>
 
 <script>
- // Permite escoger una fecha en los modales en los que se añaden y se modifican pacientes
+  // Permite escoger una fecha en los modales en los que se añaden y se modifican pacientes
   $(function() {
     $(".datepicker").datepicker({
       yearRange: "-100:+0",
@@ -64,7 +64,7 @@
           <div class="input-group-append">
             <!-- <button class="btn btn-outline-secondary" type="submit" id="search-addon">Buscar</button> -->
             <input type="hidden" id="value">
-          <!-- Filtro para búsqueda -->
+            <!-- Filtro para búsqueda -->
             <select class="form-select" name="filtro" id="filtro" onChange="update()" required>
               <option value='none' selected>Filtrar por</option>
               <option value="nombre">Nombre</option>
@@ -91,20 +91,21 @@
           <!-- Se obtienen los datos de cada paciente  -->
           <% pacientes.forEach(function(paciente){%>
           <% let id = paciente.id; %>
+          <% let identificacion = paciente.documento; %>
           <tr>
             <% for (dato in paciente){ %>
             <% if (dato !== "id"){ %>
             <td class="text-center"><%= paciente[dato]%></td>
             <% }}%>
             <td>
-              <a class="edit" data-bs-toggle="modal" data-bs-target="#editPacienteModal-<%= paciente.id %>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-              <a class="delete" data-bs-toggle="modal" data-bs-target="#deletePacienteModal<%= paciente.id %>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+              <a class="edit" data-bs-toggle="modal" data-bs-target="#editPacienteModal-<%= paciente.documento %>"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+              <a class="delete" data-bs-toggle="modal" data-bs-target="#deletePacienteModal<%= paciente.documento %>"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 
               <!-- Modal HTML para editar pacientes  -->
-              <div id="editPacienteModal-<%= paciente.id %>" class="modal fade">
+              <div id="editPacienteModal-<%= paciente.documento %>" class="modal fade">
                 <div class="modal-dialog">
                   <div class="modal-content">
-                    <form action='/pacientes/<%= id%>' enctype="application/x-www-form-urlencoded" method="POST">
+                    <form action='/pacientes/<%= identificacion%>' enctype="application/x-www-form-urlencoded" method="POST">
                       <input type="hidden" name="_method" value="PUT" />
                       <div class="modal-header">
                         <h4 class="modal-title">Editar Paciente</h4>
@@ -152,10 +153,10 @@
               </div>
 
               <!-- Modal HTML para eliminar pacientes  -->
-              <div id="deletePacienteModal<%= paciente.id %>" class="modal fade" tabindex="-1" aria-hidden="true">
+              <div id="deletePacienteModal<%= paciente.documento %>" class="modal fade" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">
-                    <form action='/pacientes/<%= id %>' enctype="application/x-www-form-urlencoded" method="POST">
+                    <form action='/pacientes/<%= identificacion %>' enctype="application/x-www-form-urlencoded" method="POST">
                       <input type="hidden" name="_method" value="DELETE" />
                       <div class="modal-header">
                         <h4 class="modal-title">Eliminar Paciente</h4>
@@ -168,7 +169,7 @@
                       <div class="modal-footer">
                         <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancelar">
                         <button type="submit" class="btn btn-danger">Eliminar</button>
-                        <input type="hidden" value="<%= id %>"></input>
+                        <input type="hidden" value="<%= identificacion %>"></input>
                       </div>
                     </form>
                   </div>

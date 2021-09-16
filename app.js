@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
 const myconnection = require("express-myconnection");
-const methodOverride = require('method-override')
+const methodOverride = require('method-override');
 
 const app = express();
 const dbOptions = {
@@ -114,22 +114,31 @@ app.route("/pacientes")
 
 //Mediante el documento, que se obtiene mediante index.ejs, se obtienen los datos respectivos de un paciente
 //Se usa get para la función de búsqueda, put para la actualización de los datos y delete para eliminarlos
-app.route("/pacientes/:id")
+app.route("/pacientes/:documento")
   .get((req, res) => {
-    let id = req.params.id;
-    console.log(identificacion);
+    let documento = req.params.documento;
     req.getConnection((err, conn) => {
       if (err) {
         return res.send(err);
       } else {
-        conn.query('SELECT * FROM users WHERE id = ?', id, (err, rows) => {
+        conn.query('SELECT * FROM users WHERE documento = ?', documento, (err, paciente) => {
           if (err) {
             return res.send(err);
           } else {
             console.log('found patient');
-            console.log(rows);
-            res.render("index", {
-              pacientes: rows
+              const patientObject ={
+               idPaciente : paciente[0].id,
+               nombrePaciente : paciente[0].nombre,
+               tipoDocumentoPaciente : paciente[0].tipoDocumento,
+               documentoPaciente : paciente[0].documento,
+               fechaNacimientoPaciente : paciente[0].fechaNacimiento,
+               edadPaciente : paciente[0].edad,
+               pesoPaciente : paciente[0].peso,
+               alturaPaciente : paciente[0].altura,
+               ibmPaciente : paciente[0].ibm
+            }
+            res.render("patientSearch", {
+              paciente: patientObject
             });
           }
         });
@@ -137,7 +146,7 @@ app.route("/pacientes/:id")
     })
   })
   .put((req, res) => {
-    let id = req.params.id;
+    let documento = req.params.documento;
 
     let edad = new PacientAge(req.body.fecha).calculateAge();
     let peso = req.body.peso;
@@ -158,7 +167,7 @@ app.route("/pacientes/:id")
       if (err) {
         return res.send(err);
       } else {
-        conn.query('UPDATE users set ? WHERE id = ?', [pacienteObj, id], (err, rows) => {
+        conn.query('UPDATE users set ? WHERE documento = ?', [pacienteObj, documento], (err, rows) => {
           if (err) {
             return res.send(err);
           } else {
@@ -170,12 +179,12 @@ app.route("/pacientes/:id")
     })
   })
   .delete((req, res) => {
-    let id = req.params.id;
+    let documento = req.params.documento;
     req.getConnection((err, conn) => {
       if (err) {
         return res.send(err);
       } else {
-        conn.query('DELETE FROM users WHERE id = ?', id, (err, rows) => {
+        conn.query('DELETE FROM users WHERE documento = ?', documento, (err, rows) => {
           if (err) {
             return res.send(err);
           } else {
